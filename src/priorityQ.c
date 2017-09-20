@@ -103,11 +103,17 @@ void *pq_delete_max(PriorityQueue *pq)
 
   //Delete the node
   //Check if this is the head node. 
-  if((Node *)(maxP->previous)){
-    ((Node *)(maxP->previous))->next = maxP->next;
-    value = maxP->data;
-    free(maxP);
-    return value;
+  if ((Node *)(maxP->previous)){
+	  if (maxP->next){
+		  ((Node *)(maxP->previous))->next = maxP->next;
+		  ((Node *)(maxP->next))->previous = maxP->previous;
+		  return maxP->data;
+	  }
+	  else{
+		  // printf("New End Node: %d\n", (int*)((Node *)(minP->previous))->data);
+		  ((Node *)(maxP->previous))->next = NULL;
+		  return maxP->data;
+	  }
   }
   //since its the head node, we need to set a new head
   else{
@@ -135,14 +141,13 @@ void *pq_delete_min(PriorityQueue *pq){
     minP = pq->data;
     currNode=minP->next;
     
-    //need to check both, incase there is only 1 node in the list
     while(currNode){
       if(minP->priority > currNode->priority){
-	minP = currNode;
-	currNode=currNode->next;
+		minP = currNode;
+		currNode=currNode->next;
       }
       else{
-	currNode = currNode->next;
+		currNode = currNode->next;
       }
     }
   }
@@ -154,10 +159,18 @@ void *pq_delete_min(PriorityQueue *pq){
   }
 
   //Delete the node
-  //Check if this is the head node. 
+  //Check if this is the head or subnode. 
   if((Node *)(minP->previous)){
-    ((Node *)(minP->previous))->next = minP->next;
-    return minP->data;
+	  if (minP->next){
+		  ((Node *)(minP->previous))->next = minP->next;
+		  ((Node *)(minP->next))->previous = minP->previous;
+		  return minP->data;
+	  }
+	  else{
+		 // printf("New End Node: %d\n", (int*)((Node *)(minP->previous))->data);
+		  ((Node *)(minP->previous))->next = NULL;
+		  return minP->data;
+	  }
   }
   //since its the head node, we need to set a new head
   else{
