@@ -68,12 +68,25 @@ Brick *sortList(Brick *bricklist, Brick *sorted){
 	return sorted;
 }
 
+int getMax(Brick *bricklist){
+	int i = 0, n, max, head;
+	max = bricklist[0].width;
+	while (bricklist[i].width){
+		i++;
+	}
+	for (n = 1; n < i; n++){
+		if (max < bricklist[n].width)
+			max = bricklist[n].width;
+	}
+	
+	return max;
+}
 
 int main(int argc, char * argv[])
 {
     /*variable declarations*/
-    int done = 0, i;
-	PriorityQueue *pqueue = NULL;
+    int done = 0, i =0, max;
+	PriorityQueue *pqueue = NULL, *tempHead = NULL;
     const Uint8 * keys;
     Sprite *sprite,*brick;
 	Brick *sbricklist; 
@@ -91,9 +104,19 @@ int main(int argc, char * argv[])
 		{22}
     };
 	sbricklist = malloc(sizeof(bricklist));
-	sortList(&bricklist,sbricklist);
-	//pqueue = pq_new(sizeof(bricklist[0].width));
-	//return 0;
+	//sortList(&bricklist,sbricklist);
+	pqueue = pq_new(sizeof(bricklist[0].width));
+	tempHead = pqueue;
+	max = getMax(bricklist);
+	printf("Max: %d\n", max);
+	while (bricklist[i].width)
+		pq_insert(pqueue, &(bricklist[i].width), max - bricklist[i].width);
+	
+	while (tempHead->data){
+		printf("%d", (int*)((Node*)pqueue->data)->data);
+		tempHead = ((Node*)tempHead->data)->next;
+	}
+	return 0;
     int mx,my;
     float mf = 0;
     Sprite *mouse;

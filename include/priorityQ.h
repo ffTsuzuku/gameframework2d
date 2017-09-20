@@ -1,7 +1,7 @@
 #ifndef __priorityQ_H__
-#define __priorityQ_H__
+#include<stdio.h>
+#include<stdlib.h>
 typedef struct Node Node;
-#include <stdlib.h>
 
 typedef struct{
 	void *data;
@@ -16,8 +16,8 @@ struct Node{
 	Node *next;
 };
 
-PriorityQueue *pq_new(size_t elementSize);
 
+PriorityQueue *pq_new(size_t elementSize);
 //Delete oldest member of the list
 void pq_delete(PriorityQueue *pq);
 //Delete Index with biggest priority
