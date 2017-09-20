@@ -39,27 +39,61 @@ void draw_stack(Sprite *brick,Vector2D start,Brick *bricklist,unsigned int count
     }
 }
 
+Brick *sortList(Brick *bricklist, Brick *sorted){
+	int i = 0, n, temp, head;
+	while (bricklist[i].width){
+		sorted[i].width = bricklist[i].width;
+		i++;
+	}
+	//printf("i: %d\n", i);
+	for (n = 0; n < i  && n+1 < i; n++){
+		head = n;
+		while (sorted[n].width < sorted[n + 1].width){
+			//printf("sorted[n].width < sorted[n + 1].width n: %d\n", sorted[n].width , sorted[n + 1].width,n);
+			temp = sorted[n].width;
+			sorted[n].width = sorted[n +1].width;
+			sorted[n+1].width = temp;
+			n--;
+			//printf("sorted[n].width > sorted[n + 1].width m: %d\n", sorted[n].width, sorted[n + 1].width,n);
+			if (n < 0)
+				n = 0;
+			
+		}
+		n = head;
+	}
+	
+	for (n = 0; n < i ; n++){
+		printf("number: %d\n", sorted[n].width);
+	}
+	return sorted;
+}
+
 
 int main(int argc, char * argv[])
 {
     /*variable declarations*/
-    int done = 0;
+    int done = 0, i;
+	PriorityQueue *pqueue = NULL;
     const Uint8 * keys;
     Sprite *sprite,*brick;
+	Brick *sbricklist; 
     static Brick bricklist[] = 
-    {
-        {2},  
-        {7},  
-        {1},  
-        {5},  
-        {14},  
-        {9},  
-        {13},  
-        {24},  
-        {16},  
-        {22}
+	{
+		{2},  
+		{7},  
+		{1},  
+		{5},  
+	    {14},  
+		{9},  
+		{13},  
+		{24},  
+		{16},  
+		{22}
     };
-    
+	sbricklist = malloc(sizeof(bricklist));
+	sortList(&bricklist,sbricklist);
+	//pqueue = pq_new(sizeof(bricklist[0].width));
+	//return 0;
     int mx,my;
     float mf = 0;
     Sprite *mouse;
@@ -101,7 +135,7 @@ int main(int argc, char * argv[])
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
             
-            draw_stack(brick,vector2d(600,700),bricklist,10);
+            draw_stack(brick,vector2d(600,700),sbricklist,10);
             
             //UI elements last
             gf2d_sprite_draw(
@@ -119,6 +153,7 @@ int main(int argc, char * argv[])
         slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
     slog("---==== END ====---");
+	//free(sbricklist);
     return 0;
 }
 /*eol@eof*/

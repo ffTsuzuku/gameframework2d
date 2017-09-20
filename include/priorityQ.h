@@ -1,4 +1,5 @@
 #ifndef __priorityQ_H__
+#define __priorityQ_H__
 typedef struct Node Node;
 #include <stdlib.h>
 

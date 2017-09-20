@@ -91,4 +91,3 @@ void *pq_delete_min(PriorityQueue *pq){
 	//free(minP);
 	return &(minP->data);
 }
-
