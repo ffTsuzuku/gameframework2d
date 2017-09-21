@@ -39,27 +39,11 @@ void draw_stack(Sprite *brick,Vector2D start,Brick *bricklist,unsigned int count
     }
 }
 
-int getMax(Brick *bricklist, int *size){
-	int i = 0, n, max, head;
-	max = bricklist[0].width;
-	while (bricklist[i].width){
-		i++;
-	}
-	*size = i;
-	for (n = 1; n < i; n++){
-		if (max < bricklist[n].width)
-			max = bricklist[n].width;
-	}
-	
-	return max;
-}
-
 int main(int argc, char * argv[])
 {
     /*variable declarations*/
-    int done = 0, i =0, max, size, *value;
+	int done = 0, i = 0, size;
 	PriorityQueue *pqueue = NULL;
-	Node *tempNode = NULL;
     const Uint8 * keys;
     Sprite *sprite,*brick;
 	Brick *sbricklist; 
@@ -76,27 +60,23 @@ int main(int argc, char * argv[])
 		{16},  
 		{22}
     };
+	//Allocate space for your sorted Array. 
 	sbricklist = malloc(sizeof(bricklist));
 	pqueue = pq_new(sizeof(bricklist[0].width));
-	if (!pqueue){
-		printf("Not Allocated\n");
-		return;
-	}
-	max = getMax(bricklist, &size);
-	printf("Max: %d\n", max);
+
 	while (bricklist[i].width){
-		pq_insert(pqueue, bricklist[i].width, max - (bricklist[i].width));
+		pq_insert(pqueue, &bricklist[i].width, bricklist[i].width);
 		i++;
 	}
-	tempNode = (Node*)(pqueue->data);
+	size = i;
 
 	for (i = 0; i < size; i++){
-		sbricklist[i].width = (int*)(pq_delete_min(pqueue));
+		sbricklist[i].width = *(int*)(pq_delete_max(pqueue));
 	}
-	printf("Sorted\n");
+	/*printf("Sorted\n");
 	for (i = 0; i < size; i++){
 		printf("%d\n", sbricklist[i].width);
-	}
+	}*/
 
     int mx,my;
     float mf = 0;
@@ -157,7 +137,8 @@ int main(int argc, char * argv[])
         slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
     slog("---==== END ====---");
-	//free(sbricklist);
+	free(sbricklist);
+	free(pqueue);
     return 0;
 }
 /*eol@eof*/

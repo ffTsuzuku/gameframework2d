@@ -10,7 +10,7 @@ PriorityQueue *pq_new(size_t elementSize)
 {
   PriorityQueue *pqueue = malloc(sizeof(pqueue));
   pqueue->data = NULL;
-  pqueue->elementSize = elementSize;
+  //pqueue->elementSize = elementSize;
   
   return pqueue;
 }
