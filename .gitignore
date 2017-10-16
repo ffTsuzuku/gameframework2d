@@ -29,7 +29,6 @@
 *.dylib
 
 # Executables
-*.exe
 *.out
 *.app
 *.i*86
@@ -51,8 +50,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-#this program's executable
-gf2d
 
 #logs
 *.log
