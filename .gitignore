@@ -52,7 +52,6 @@ Mkfile.old
 dkms.conf
 
 #this program's executable
-gf2d
 
 #logs
 *.log

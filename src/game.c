@@ -39,6 +39,7 @@ int main(int argc, char * argv[])
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     
     map = tilemap_load("levels/tilemap.map");
+
     vector2d_copy(path[0],map->start);
     vector2d_copy(path[1],map->end);
     /*main game loop*/
