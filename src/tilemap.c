@@ -3,6 +3,7 @@
 #include "gf2d_draw.h"
 #include <stdio.h>
 #include <string.h>
+#include "gf2d_graphics.h"
 
 TileMap *tilemap_load(char *filename)
 {
@@ -16,6 +17,7 @@ TileMap *tilemap_load(char *filename)
     if (!file)
     {
         slog("failed to open file %s",filename);
+		slog("Error %d \n", errno);
         return NULL;
     }
     tilemap = (TileMap *)malloc(sizeof(TileMap));
@@ -145,7 +147,7 @@ void tilemap_draw(TileMap *tilemap,Vector2D position)
         3);
 }
 
-void tilemap_draw_path(Vector2D *path,int length, TileMap *tilemap, Vector2D position)
+/*void tilemap_draw_path(Vector2D *path,int length, TileMap *tilemap, Vector2D position)
 {
     int i;
     if (!path)return;
@@ -156,8 +158,39 @@ void tilemap_draw_path(Vector2D *path,int length, TileMap *tilemap, Vector2D pos
             vector2d(position.x + (path[i + 1].x * tilemap->tileset->frame_w) + tilemap->tileset->frame_w/2,position.y + (path[i + 1].y * tilemap->tileset->frame_h) + tilemap->tileset->frame_h/2),
             vector4d(255,0,0,255));
     }
-}
+}*/
 
+void tilemap_draw_path(Vector2D **path, int length, TileMap *tilemap, Vector2D position)
+{
+	int i,p1X,p1Y,p2X,p2Y,p3X,p3Y;
+	Vector2D *test = *path;
+	if (!path)return;
+	for (i = 0; i < length - 1; i++)
+	{
+		/*printf("%f:%f\t", (*path)->x, (*path)->y);
+		(*path) += 1;
+		printf("%f:%f\n", (*path)->x, (*path)->y);*/
+
+		 p1X = (*path)->x;
+		 p1Y = (*path)->y;
+		(*path) += 1;
+		 p2X = (*path)->x;
+		 p2Y = (*path)->y;
+
+		/*gf2d_draw_line(
+			vector2d(position.x + ((*path)->x * tilemap->tileset->frame_w) + tilemap->tileset->frame_w / 2, position.y + ((*path)->y * tilemap->tileset->frame_h + tilemap->tileset->frame_h / 2)),
+			vector2d((position.x + ((*path) += 1)->x * tilemap->tileset->frame_w) + tilemap->tileset->frame_w / 2, position.y + (((*path) += 1)->y * tilemap->tileset->frame_h) + tilemap->tileset->frame_h / 2),
+			vector4d(255, 0, 0, 255));*/
+
+		gf2d_draw_line(
+			vector2d(position.x + (p1X * tilemap->tileset->frame_w) + tilemap->tileset->frame_w / 2, position.y + (p1Y * tilemap->tileset->frame_h + tilemap->tileset->frame_h / 2)),
+			vector2d(position.x + (p2X * tilemap->tileset->frame_w) + tilemap->tileset->frame_w / 2, position.y + (p2Y * tilemap->tileset->frame_h) + tilemap->tileset->frame_h / 2),
+			vector4d(255, 0, 0, 255));
+
+	}
+	gf2d_grahics_next_frame();
+	
+}
 
 
 /*eol@eof*/

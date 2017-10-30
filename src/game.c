@@ -3,6 +3,7 @@
 #include "gf2d_sprite.h"
 #include "simple_logger.h"
 #include "tilemap.h"
+#include "solve_path.h"
 
 int main(int argc, char * argv[])
 {
@@ -17,7 +18,9 @@ int main(int argc, char * argv[])
     TileMap *map;
     Vector4D mouseColor = {0,0,255,200};
     static Vector2D path[2];
-   
+
+	Vector2D *solution = malloc(sizeof(Vector2D)*45);
+
     /*program initializtion*/
     init_logger("gf2d.log");
     slog("---==== BEGIN ====---");
@@ -58,7 +61,7 @@ int main(int argc, char * argv[])
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
                         
             tilemap_draw(map,vector2d(86,24));
-            tilemap_draw_path(path,2, map,vector2d(86,24));
+//            tilemap_draw_path(path,2, map,vector2d(86,24));
             //UI elements last
             gf2d_sprite_draw(
                 mouse,
@@ -69,11 +72,24 @@ int main(int argc, char * argv[])
                 NULL,
                 &mouseColor,
                 (int)mf);
-        gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
-        
+		solution = solve_path(path[0],path[1]);
+		
+		int j = 0;
+		/*while (solution && j <45){
+			printf("{%f:%f}\n", solution->x, solution->y);
+			solution++;
+			j++;
+		}*/
+
+		tilemap_draw_path(&solution, 45, map, vector2d(86, 24));
+        //gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
+	      
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
    //     slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
+	while (!done){
+		if (keys[SDL_SCANCODE_ESCAPE])done = 1;
+	}
     slog("---==== END ====---");
     return 0;
 }
